@@ -169,7 +169,7 @@ class PatientManagement:
 
 def main():
     root = tk.Tk()
-    app = PatientManagement(root)
+    app = PatientManagement(root, lambda:None)
     root.mainloop()
 
 if __name__ == "__main__":

@@ -7,8 +7,9 @@ from appointment_management import AppointmentManagement
 from billing_reports import BillingReports
 
 class AdminDashboard:
-    def __init__(self, root):
+    def __init__(self, root, back_to_dashboard):
         self.root = root
+        self.back_to_dashboard = back_to_dashboard
         self.root.title("Hospital Management System - Admin Dashboard")
         self.root.geometry("800x500")
 
@@ -82,8 +83,13 @@ class AdminDashboard:
     def open_dashboard(self):
         """Reopen the admin dashboard."""
         root = tk.Tk()
-        app = AdminDashboard(root)
+        app = AdminDashboard(root, self.back_to_dashboard)
         root.mainloop()
+    
+    # def go_back_to_login(self):
+    #     """Return to the login screen."""
+    #     self.root.destroy()
+    #     self.back_to_dashboard()  # Call the back_to_dashboard function
 
     def logout(self):
         """Logout and return to Login Window."""
@@ -91,9 +97,10 @@ class AdminDashboard:
         from login import main  # Import and run the login script
         main()
 
+
 def main():
     root = tk.Tk()
-    app = AdminDashboard(root)
+    app = AdminDashboard(root, lambda: None)
     root.mainloop()
 
 if __name__ == "__main__":
