@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-from patient_management import PatientManagement
-from doctor_management import DoctorManagement
-from medical_records import MedicalRecordsManagement
-from appointment_management import AppointmentManagement
-from billing_reports import BillingReports
+from patients.patient_management import PatientManagement
+from staff_management.doctor_management import DoctorManagement
+from data_management.medical_records import MedicalRecordsManagement
+from appointments.appointment_management import AppointmentManagement
+from billing.billing_reports import BillingReports
 
 class AdminDashboard:
     def __init__(self, root, back_to_dashboard):
@@ -38,7 +38,7 @@ class AdminDashboard:
         button_reports = ttk.Button(root, text="View Reports", command=self.view_reports, width=20, padding=10, style="Custom.TButton")
         button_reports.pack(pady=10)
 
-        button_logout = ttk.Button(root, text="Logout", command=self.logout, width=20, padding=10, style="Custom.TButton")
+        button_logout = ttk.Button(root, text="LOGOUT", command=self.logout, width=20, padding=10, style="Custom.TButton")
         button_logout.pack(pady=10)
 
     def manage_patients(self):
@@ -94,7 +94,7 @@ class AdminDashboard:
     def logout(self):
         """Logout and return to Login Window."""
         self.root.destroy()
-        from login import main  # Import and run the login script
+        from start import main  # Import and run the login script
         main()
 
 

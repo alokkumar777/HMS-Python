@@ -1,13 +1,13 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 import sqlite3
-from admin_dashboard import AdminDashboard  # Import the AdminDashboard class
-from doctor_dashboard import DoctorDashboard
-from receptionist_dashboard import ReceptionistDashboard
+from dashboards.admin_dashboard import AdminDashboard  # Import the AdminDashboard class
+from dashboards.doctor_dashboard import DoctorDashboard
+from dashboards.receptionist_dashboard import ReceptionistDashboard
 
 def validate_login(username, password, role):
     """Validate user credentials."""
-    conn = sqlite3.connect('hospital.db')
+    conn = sqlite3.connect('database/hospital.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM Users WHERE username = ? AND password = ? AND role = ?', (username, password, role))
     user = cursor.fetchone()
@@ -27,17 +27,17 @@ def login():
     if user:
         messagebox.showinfo("Login Successful", f"Welcome {user[1]}!")
         root.destroy()  # Close the login window
-        open_dashboard(role, user[0])  # Open the dashboard based on role
+        open_dashboard(role)  # Open the dashboard based on role
     else:
         messagebox.showerror("Login Failed", "Invalid credentials")
 
-def open_dashboard(role, user_id):
+def open_dashboard(role):
     """Open the dashboard based on user role."""
     root = tk.Tk()
     if role == "Admin":
         app = AdminDashboard(root, lambda: main())  # Pass the main function as a callback
     elif role == "Doctor":
-        app = DoctorDashboard(root, lambda: main(), user_id)  # Pass the main function as a callback
+        app = DoctorDashboard(root, lambda: main())  # Pass the main function as a callback
     elif role == "Receptionist":
         app = ReceptionistDashboard(root, lambda: main())  # Pass the main function as a callback
     root.mainloop()
@@ -86,7 +86,7 @@ def main():
 
     style = ttk.Style()
     style.configure("Custom.TButton", font=("Verdana", 10))
-    button_login = ttk.Button(root, text="Login", command=login, width=20, padding=5, style="Custom.TButton")
+    button_login = ttk.Button(root, text="LOGIN", command=login, width=20, padding=5, style="Custom.TButton")
     button_login.pack(pady=15)
 
     root.mainloop()

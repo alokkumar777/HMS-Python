@@ -7,10 +7,11 @@ class DoctorManagement:
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Doctor Management")
-        self.root.geometry("800x600")
+        self.root.geometry("1300x630")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = ttk.Label(root, text="Doctor Management", font=("Arial", 20, "bold"))
+        label_title = ttk.Label(root, text="Doctor Management", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
@@ -21,34 +22,39 @@ class DoctorManagement:
         self.entry_name = ttk.Entry(frame_input, width=30)
         self.entry_name.grid(row=0, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Specialization:").grid(row=1, column=0, padx=5, pady=5)
-        self.entry_specialization = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Specialization:").grid(row=1, column=0, padx=5, pady=5)
+        self.entry_specialization = ttk.Entry(frame_input, width=30)
         self.entry_specialization.grid(row=1, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Contact Number:").grid(row=2, column=0, padx=5, pady=5)
-        self.entry_contact = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Contact Number:").grid(row=2, column=0, padx=5, pady=5)
+        self.entry_contact = ttk.Entry(frame_input, width=30)
         self.entry_contact.grid(row=2, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Availability:").grid(row=3, column=0, padx=5, pady=5)
-        self.entry_availability = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Availability:").grid(row=3, column=0, padx=5, pady=5)
+        self.entry_availability = ttk.Entry(frame_input, width=30)
         self.entry_availability.grid(row=3, column=1, padx=5, pady=5)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
+        style.configure("Custom.Treeview", font=("Verdana", 10))
+        style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        tk.Button(frame_buttons, text="Add Doctor", command=self.add_doctor).grid(row=0, column=0, padx=5)
-        tk.Button(frame_buttons, text="Update Doctor", command=self.update_doctor).grid(row=0, column=1, padx=5)
-        tk.Button(frame_buttons, text="Delete Doctor", command=self.delete_doctor).grid(row=0, column=2, padx=5)
-        tk.Button(frame_buttons, text="View All Doctors", command=self.view_doctors).grid(row=0, column=3, padx=5)
-        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10).grid(row=1, column=0, columnspan=4, pady=10)
+        ttk.Button(frame_buttons, text="Add Doctor", command=self.add_doctor, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="Update Doctor", command=self.update_doctor, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="Delete Doctor", command=self.delete_doctor, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="View All Doctors", command=self.view_doctors, padding=10, style="Custom.TButton").grid(row=0, column=3, padx=5)
+        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10, style="Custom.TButton").grid(row=1, column=0, columnspan=4, pady=10)
 
 
         # Doctor List (Treeview)
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Specialization", "Contact", "Availability"), show="headings")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Specialization", "Contact", "Availability"), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Name", text="Name")
         self.tree.heading("Specialization", text="Specialization")
@@ -75,7 +81,7 @@ class DoctorManagement:
             messagebox.showerror("Error", "All fields are required!")
             return
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO Doctors (name, specialization, contact_number, availability)
@@ -105,7 +111,7 @@ class DoctorManagement:
             messagebox.showerror("Error", "All fields are required!")
             return
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE Doctors
@@ -128,7 +134,7 @@ class DoctorManagement:
 
         doctor_id = self.tree.item(selected_item, "values")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('DELETE FROM Doctors WHERE doctor_id = ?', (doctor_id,))
         conn.commit()
@@ -139,7 +145,7 @@ class DoctorManagement:
 
     def view_doctors(self):
         """View all doctors in the database."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Doctors')
         rows = cursor.fetchall()

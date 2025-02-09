@@ -1,27 +1,31 @@
 import tkinter as tk
 from tkinter import ttk
 import sqlite3
-from appointment_management import AppointmentManagement
-from patient_management import PatientManagement
+from appointments.appointment_management import AppointmentManagement
+from patients.patient_management import PatientManagement
 
 class ReceptionistDashboard:
     def __init__(self, root, back_to_dashboard):
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Receptionist Dashboard")
-        self.root.geometry("800x600")
+        self.root.geometry("600x300")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = tk.Label(root, text="Receptionist Dashboard", font=("Arial", 20, "bold"))
+        label_title = tk.Label(root, text="Receptionist Dashboard", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        tk.Button(frame_buttons, text="Manage Appointments", command=self.manage_appointments).grid(row=0, column=0, padx=5)
-        tk.Button(frame_buttons, text="Manage Patients", command=self.manage_patients).grid(row=0, column=1, padx=5)
-        tk.Button(frame_buttons, text="Back to Login", command=self.logout).grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="Manage Appointments", command=self.manage_appointments, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="Manage Patients", command=self.manage_patients, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="LOGOUT", command=self.logout, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
 
     def manage_appointments(self):
         """Open Appointment Management Interface."""
@@ -51,7 +55,7 @@ class ReceptionistDashboard:
     def logout(self):
         """Logout and return to Login Window."""
         self.root.destroy()
-        from login import main  # Import and run the login script
+        from start import main  # Import and run the login script
         main()
 
 def main():

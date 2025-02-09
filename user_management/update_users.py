@@ -34,6 +34,6 @@ def update_user(current_username, new_username=None, new_password=None, new_role
 
 # Example Usage
 # update_user("Alok Kumar", new_username="Alok123", new_password="newpassword123", new_role="Super Admin")
-# update_user("doctor1", new_username="larry", new_password="larry123")
-# update_user("receptionist1", new_role="Head Receptionist")
+# update_user("doctor", new_username="fisher", new_password="fisher123")
+update_user("receptionist", new_username="recep", new_password="recep123")
 

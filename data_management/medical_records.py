@@ -7,10 +7,11 @@ class MedicalRecordsManagement:
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Medical Records Management")
-        self.root.geometry("1000x600")
+        self.root.geometry("1300x650")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = tk.Label(root, text="Medical Records Management", font=("Arial", 20, "bold"))
+        label_title = ttk.Label(root, text="Medical Records Management", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
@@ -18,48 +19,54 @@ class MedicalRecordsManagement:
         frame_input.pack(pady=10)
 
         # Patient Dropdown
-        tk.Label(frame_input, text="Patient:").grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Patient:").grid(row=0, column=0, padx=5, pady=5)
         self.patient_var = tk.StringVar()
         self.patient_dropdown = ttk.Combobox(frame_input, textvariable=self.patient_var, width=30)
         self.patient_dropdown.grid(row=0, column=1, padx=5, pady=5)
         self.load_patients()
 
         # Doctor Dropdown
-        tk.Label(frame_input, text="Doctor:").grid(row=1, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Doctor:").grid(row=1, column=0, padx=5, pady=5)
         self.doctor_var = tk.StringVar()
         self.doctor_dropdown = ttk.Combobox(frame_input, textvariable=self.doctor_var, width=30)
         self.doctor_dropdown.grid(row=1, column=1, padx=5, pady=5)
         self.load_doctors()
 
         # Diagnosis and Prescription
-        tk.Label(frame_input, text="Diagnosis:").grid(row=2, column=0, padx=5, pady=5)
-        self.entry_diagnosis = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Diagnosis:").grid(row=2, column=0, padx=5, pady=5)
+        self.entry_diagnosis = ttk.Entry(frame_input, width=32)
         self.entry_diagnosis.grid(row=2, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Prescription:").grid(row=3, column=0, padx=5, pady=5)
-        self.entry_prescription = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Prescription:").grid(row=3, column=0, padx=5, pady=5)
+        self.entry_prescription = ttk.Entry(frame_input, width=32)
         self.entry_prescription.grid(row=3, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Date (YYYY-MM-DD):").grid(row=4, column=0, padx=5, pady=5)
-        self.entry_date = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Date (YYYY-MM-DD):").grid(row=4, column=0, padx=5, pady=5)
+        self.entry_date = ttk.Entry(frame_input, width=32)
         self.entry_date.grid(row=4, column=1, padx=5, pady=5)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
+        style.configure("Custom.Treeview", font=("Verdana", 10))
+        style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        tk.Button(frame_buttons, text="Add Record", command=self.add_record).grid(row=0, column=0, padx=5)
-        tk.Button(frame_buttons, text="Update Record", command=self.update_record).grid(row=0, column=1, padx=5)
-        tk.Button(frame_buttons, text="Delete Record", command=self.delete_record).grid(row=0, column=2, padx=5)
-        tk.Button(frame_buttons, text="View All Records", command=self.view_records).grid(row=0, column=3, padx=5)
-        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10).grid(row=1, column=0, columnspan=4, pady=10)
+        ttk.Button(frame_buttons, text="Add Record", command=self.add_record, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="Update Record", command=self.update_record, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="Delete Record", command=self.delete_record, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="View All Records", command=self.view_records, padding=10, style="Custom.TButton").grid(row=0, column=3, padx=5)
+        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10, style="Custom.TButton").grid(row=1, column=0, columnspan=4, pady=10)
 
 
         # Medical Records List (Treeview)
+        
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Doctor", "Diagnosis", "Prescription", "Date"), show="headings")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Doctor", "Diagnosis", "Prescription", "Date"), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Patient", text="Patient")
         self.tree.heading("Doctor", text="Doctor")
@@ -78,7 +85,7 @@ class MedicalRecordsManagement:
 
     def load_patients(self):
         """Load patients into the dropdown."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT patient_id, name FROM Patients')
         patients = cursor.fetchall()
@@ -87,7 +94,7 @@ class MedicalRecordsManagement:
 
     def load_doctors(self):
         """Load doctors into the dropdown."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT doctor_id, name FROM Doctors')
         doctors = cursor.fetchall()
@@ -109,7 +116,7 @@ class MedicalRecordsManagement:
         patient_id = patient.split(" - ")[0]
         doctor_id = doctor.split(" - ")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO MedicalRecords (patient_id, doctor_id, diagnosis, prescription, date)
@@ -143,7 +150,7 @@ class MedicalRecordsManagement:
         patient_id = patient.split(" - ")[0]
         doctor_id = doctor.split(" - ")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE MedicalRecords
@@ -166,7 +173,7 @@ class MedicalRecordsManagement:
 
         record_id = self.tree.item(selected_item, "values")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('DELETE FROM MedicalRecords WHERE record_id = ?', (record_id,))
         conn.commit()
@@ -177,7 +184,7 @@ class MedicalRecordsManagement:
 
     def view_records(self):
         """View all medical records in the database."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             SELECT m.record_id, p.name, d.name, m.diagnosis, m.prescription, m.date

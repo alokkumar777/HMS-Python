@@ -7,7 +7,7 @@ class PatientManagement:
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Patient Management")
-        self.root.geometry("1300x630")
+        self.root.geometry("1300x650")
         self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
@@ -57,7 +57,7 @@ class PatientManagement:
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address"), show="headings", style="Custom.Treeview")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address"), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Name", text="Name")
         self.tree.heading("Age", text="Age")
@@ -86,7 +86,7 @@ class PatientManagement:
             messagebox.showerror("Error", "All fields are required!")
             return
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO Patients (name, age, gender, contact_number, address, date_of_registration)
@@ -117,7 +117,7 @@ class PatientManagement:
             messagebox.showerror("Error", "All fields are required!")
             return
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE Patients
@@ -140,7 +140,7 @@ class PatientManagement:
 
         patient_id = self.tree.item(selected_item, "values")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('DELETE FROM Patients WHERE patient_id = ?', (patient_id,))
         conn.commit()
@@ -151,7 +151,7 @@ class PatientManagement:
 
     def view_patients(self):
         """View all patients in the database."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Patients')
         rows = cursor.fetchall()

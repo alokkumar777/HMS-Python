@@ -8,10 +8,11 @@ class AppointmentManagement:
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Appointment Management")
-        self.root.geometry("1000x600")
+        self.root.geometry("1300x650")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = tk.Label(root, text="Appointment Management", font=("Arial", 20, "bold"))
+        label_title = ttk.Label(root, text="Appointment Management", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
@@ -19,44 +20,49 @@ class AppointmentManagement:
         frame_input.pack(pady=10)
 
         # Patient Dropdown
-        tk.Label(frame_input, text="Patient:").grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Patient:").grid(row=0, column=0, padx=5, pady=5)
         self.patient_var = tk.StringVar()
         self.patient_dropdown = ttk.Combobox(frame_input, textvariable=self.patient_var, width=30)
         self.patient_dropdown.grid(row=0, column=1, padx=5, pady=5)
         self.load_patients()
 
         # Doctor Dropdown
-        tk.Label(frame_input, text="Doctor:").grid(row=1, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Doctor:").grid(row=1, column=0, padx=5, pady=5)
         self.doctor_var = tk.StringVar()
         self.doctor_dropdown = ttk.Combobox(frame_input, textvariable=self.doctor_var, width=30)
         self.doctor_dropdown.grid(row=1, column=1, padx=5, pady=5)
         self.load_doctors()
 
         # Date and Time
-        tk.Label(frame_input, text="Date (YYYY-MM-DD):").grid(row=2, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Date (YYYY-MM-DD):").grid(row=2, column=0, padx=5, pady=5)
         self.entry_date = ttk.Entry(frame_input, width=30)
         self.entry_date.grid(row=2, column=1, padx=5, pady=5)
 
-        tk.Label(frame_input, text="Time (HH:MM):").grid(row=3, column=0, padx=5, pady=5)
+        ttk.Label(frame_input, text="Time (HH:MM:SS):").grid(row=3, column=0, padx=5, pady=5)
         self.entry_time = ttk.Entry(frame_input, width=30)
         self.entry_time.grid(row=3, column=1, padx=5, pady=5)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
+        style.configure("Custom.Treeview", font=("Verdana", 10))
+        style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        ttk.Button(frame_buttons, text="Schedule Appointment", command=self.schedule_appointment).grid(row=0, column=0, padx=5)
-        ttk.Button(frame_buttons, text="Update Appointment", command=self.update_appointment).grid(row=0, column=1, padx=5)
-        ttk.Button(frame_buttons, text="Cancel Appointment", command=self.cancel_appointment).grid(row=0, column=2, padx=5)
-        ttk.Button(frame_buttons, text="View All Appointments", command=self.view_appointments).grid(row=0, column=3, padx=5)
-        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10).grid(row=1, column=0, columnspan=4, pady=10)
+        ttk.Button(frame_buttons, text="Schedule Appointment", command=self.schedule_appointment, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="Update Appointment", command=self.update_appointment, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="Cancel Appointment", command=self.cancel_appointment, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="View All Appointments", command=self.view_appointments, padding=10, style="Custom.TButton").grid(row=0, column=3, padx=5)
+        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10, style="Custom.TButton").grid(row=1, column=0, columnspan=4, pady=10)
 
 
         # Appointment List (Treeview)
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Doctor", "Date", "Time", "Status"), show="headings")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Doctor", "Date", "Time", "Status"), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Patient", text="Patient")
         self.tree.heading("Doctor", text="Doctor")
@@ -75,7 +81,7 @@ class AppointmentManagement:
 
     def load_patients(self):
         """Load patients into the dropdown."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT patient_id, name FROM Patients')
         patients = cursor.fetchall()
@@ -84,7 +90,7 @@ class AppointmentManagement:
 
     def load_doctors(self):
         """Load doctors into the dropdown."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT doctor_id, name FROM Doctors')
         doctors = cursor.fetchall()
@@ -105,7 +111,7 @@ class AppointmentManagement:
         patient_id = patient.split(" - ")[0]
         doctor_id = doctor.split(" - ")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO Appointments (patient_id, doctor_id, date, time, status)
@@ -138,7 +144,7 @@ class AppointmentManagement:
         patient_id = patient.split(" - ")[0]
         doctor_id = doctor.split(" - ")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE Appointments
@@ -161,7 +167,7 @@ class AppointmentManagement:
 
         appointment_id = self.tree.item(selected_item, "values")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             UPDATE Appointments
@@ -176,7 +182,7 @@ class AppointmentManagement:
 
     def view_appointments(self):
         """View all appointments in the database."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             SELECT a.appointment_id, p.name, d.name, a.date, a.time, a.status

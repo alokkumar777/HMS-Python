@@ -10,10 +10,11 @@ class BillingReports:
         self.root = root
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Billing and Reports")
-        self.root.geometry("1000x600")
+        self.root.geometry("1300x650")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = tk.Label(root, text="Billing and Reports", font=("Arial", 20, "bold"))
+        label_title = tk.Label(root, text="Billing and Reports", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
@@ -29,32 +30,37 @@ class BillingReports:
 
         # Amount and Date
         tk.Label(frame_input, text="Amount:").grid(row=1, column=0, padx=5, pady=5)
-        self.entry_amount = tk.Entry(frame_input, width=30)
+        self.entry_amount = ttk.Entry(frame_input, width=32)
         self.entry_amount.grid(row=1, column=1, padx=5, pady=5)
 
         tk.Label(frame_input, text="Date (YYYY-MM-DD):").grid(row=2, column=0, padx=5, pady=5)
-        self.entry_date = tk.Entry(frame_input, width=30)
+        self.entry_date = ttk.Entry(frame_input, width=32)
         self.entry_date.grid(row=2, column=1, padx=5, pady=5)
 
         tk.Label(frame_input, text="Status").grid(row=3, column=0, padx=5, pady=5)
-        self.entry_status = tk.Entry(frame_input, width=30)
+        self.entry_status = ttk.Entry(frame_input, width=32)
         self.entry_status.grid(row=3, column=1, padx=5, pady=5)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
+        style.configure("Custom.Treeview", font=("Verdana", 10))
+        style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        tk.Button(frame_buttons, text="Generate Bill", command=self.generate_bill).grid(row=0, column=0, padx=5)
-        tk.Button(frame_buttons, text="View Billing History", command=self.view_billing_history).grid(row=0, column=1, padx=5)
-        tk.Button(frame_buttons, text="Generate Revenue Report", command=self.generate_revenue_report).grid(row=0, column=2, padx=5)
-        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10).grid(row=1, column=0, columnspan=4, pady=10)
+        ttk.Button(frame_buttons, text="Generate Bill", command=self.generate_bill, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="View Billing History", command=self.view_billing_history, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="Generate Revenue Report", command=self.generate_revenue_report, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10, style="Custom.TButton").grid(row=1, column=0, columnspan=4, pady=10)
 
 
         # Billing History (Treeview)
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Amount", "Date", "Status"), show="headings")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Patient", "Amount", "Date", "Status"), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Patient", text="Patient")
         self.tree.heading("Amount", text="Amount")
@@ -72,7 +78,7 @@ class BillingReports:
 
     def load_patients(self):
         """Load patients into the dropdown."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('SELECT patient_id, name FROM Patients')
         patients = cursor.fetchall()
@@ -92,7 +98,7 @@ class BillingReports:
 
         patient_id = patient.split(" - ")[0]
 
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO Billing (patient_id, amount, date, status)
@@ -107,7 +113,7 @@ class BillingReports:
 
     def view_billing_history(self):
         """View all billing history in the database."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             SELECT b.bill_id, p.name, b.amount, b.date, b.status
@@ -115,6 +121,12 @@ class BillingReports:
             JOIN Patients p ON b.patient_id = p.patient_id
         ''')
         rows = cursor.fetchall()
+        # Display the data in terminal
+        # print("Billing Reports Table:")
+        # print("ID | Patient Name | Bill Amount | Bill Date | Bill Status")
+        # print("-" * 50)
+        # for row in rows:    
+        #     print(row)
         conn.close()
 
         # Clear existing data in the treeview
@@ -127,7 +139,7 @@ class BillingReports:
 
     def generate_revenue_report(self):
         """Generate a revenue report."""
-        conn = sqlite3.connect('hospital.db')
+        conn = sqlite3.connect('database/hospital.db')
         cursor = conn.cursor()
         cursor.execute('''
             SELECT date, SUM(amount) as total_revenue
@@ -150,7 +162,7 @@ class BillingReports:
         report_window = tk.Toplevel(self.root)
         report_window.title("Revenue Report")
 
-        tree = ttk.Treeview(report_window, columns=("Date", "Total Revenue"), show="headings")
+        tree = ttk.Treeview(report_window, columns=("Date", "Total Revenue"), show="headings", style="Custom.Treeview", padding=10)
         tree.heading("Date", text="Date")
         tree.heading("Total Revenue", text="Total Revenue")
         tree.pack()
