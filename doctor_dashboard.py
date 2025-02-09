@@ -4,9 +4,10 @@ import sqlite3
 from medical_records import MedicalRecordsManagement
 
 class DoctorDashboard:
-    def __init__(self, root, back_to_dashboard):
+    def __init__(self, root, back_to_dashboard, doctor_id):
         self.root = root
         self.back_to_dashboard = back_to_dashboard
+        self.doctor_id = doctor_id  # Store the logged-in doctor's ID
         self.root.title("Doctor Dashboard")
         self.root.geometry("800x600")
 
@@ -39,8 +40,8 @@ class DoctorDashboard:
             SELECT a.appointment_id, p.name, a.date, a.time, a.status
             FROM Appointments a
             JOIN Patients p ON a.patient_id = p.patient_id
-            WHERE a.doctor_id = ?  # Replace with the logged-in doctor's ID
-        ''', (1,))  # Replace 1 with the logged-in doctor's ID
+            WHERE a.doctor_id = ?  -- Replace with the logged-in doctor's ID
+        ''', (self.doctor_id,))  # Replace 1 with the logged-in doctor's ID
         rows = cursor.fetchall()
         conn.close()
 
@@ -62,7 +63,7 @@ class DoctorDashboard:
     def open_dashboard(self):
         """Reopen the admin dashboard."""
         root = tk.Tk()
-        app = DoctorDashboard(root, self.back_to_dashboard)
+        app = DoctorDashboard(root, self.back_to_dashboard, self.doctor_id)
         root.mainloop()
     # def go_back_to_dashboard(self):
     #     """Return to the login screen."""

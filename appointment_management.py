@@ -204,7 +204,7 @@ class AppointmentManagement:
 
 def main():
     root = tk.Tk()
-    app = AppointmentManagement(root)
+    app = AppointmentManagement(root, lambda: None)
     root.mainloop()
 
 if __name__ == "__main__":

@@ -23,8 +23,8 @@ def add_users():
     cursor = conn.cursor()
     users = [
         ("Alok Kumar", "itsak123", "Admin"),
-        ("doctor1", "doctor123", "Doctor"),
-        ("receptionist1", "receptionist123", "Receptionist")
+        ("doctor", "doctor123", "Doctor"),
+        ("receptionist", "receptionist123", "Receptionist")
     ]
     cursor.executemany('INSERT INTO Users (username, password, role) VALUES (?, ?, ?)', users)
     conn.commit()

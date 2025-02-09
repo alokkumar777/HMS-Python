@@ -206,7 +206,7 @@ class MedicalRecordsManagement:
 
 def main():
     root = tk.Tk()
-    app = MedicalRecordsManagement(root)
+    app = MedicalRecordsManagement(root, lambda:None)
     root.mainloop()
 
 if __name__ == "__main__":

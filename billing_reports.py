@@ -36,6 +36,10 @@ class BillingReports:
         self.entry_date = tk.Entry(frame_input, width=30)
         self.entry_date.grid(row=2, column=1, padx=5, pady=5)
 
+        tk.Label(frame_input, text="Status").grid(row=3, column=0, padx=5, pady=5)
+        self.entry_status = tk.Entry(frame_input, width=30)
+        self.entry_status.grid(row=3, column=1, padx=5, pady=5)
+
         # Buttons
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
@@ -80,6 +84,7 @@ class BillingReports:
         patient = self.patient_var.get()
         amount = self.entry_amount.get()
         date = self.entry_date.get()
+        status = self.entry_status.get()
 
         if not patient or not amount or not date:
             messagebox.showerror("Error", "All fields are required!")
@@ -92,7 +97,7 @@ class BillingReports:
         cursor.execute('''
             INSERT INTO Billing (patient_id, amount, date, status)
             VALUES (?, ?, ?, ?)
-        ''', (patient_id, amount, date, "Unpaid"))
+        ''', (patient_id, amount, date, status))
         conn.commit()
         conn.close()
 
@@ -158,10 +163,11 @@ class BillingReports:
         self.patient_var.set("")
         self.entry_amount.delete(0, tk.END)
         self.entry_date.delete(0, tk.END)
+        self.entry_status.delete(0, tk.END)
 
 def main():
     root = tk.Tk()
-    app = BillingReports(root)
+    app = BillingReports(root, lambda: None)
     root.mainloop()
 
 if __name__ == "__main__":

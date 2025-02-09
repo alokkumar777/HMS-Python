@@ -91,5 +91,3 @@ if __name__ == "__main__":
     conn = create_connection()
     create_tables(conn)
     conn.close()
-
-    

@@ -8,9 +8,10 @@ class PatientManagement:
         self.back_to_dashboard = back_to_dashboard
         self.root.title("Patient Management")
         self.root.geometry("1300x630")
+        self.root.option_add("*Font", "Verdana 10")
 
         # Title Label
-        label_title = tk.Label(root, text="Patient Management", font=("Arial", 20, "bold"))
+        label_title = tk.Label(root, text="Patient Management", font=("Verdana", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
@@ -38,20 +39,25 @@ class PatientManagement:
         self.entry_address.grid(row=4, column=1, padx=5, pady=5)
 
         # Buttons
+        style = ttk.Style()
+        # Configure the font size for the button
+        style.configure("Custom.TButton", font=("Verdana", 10))
+        style.configure("Custom.Treeview", font=("Verdana", 10))
+        style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
-        ttk.Button(frame_buttons, text="Add Patient", command=self.add_patient, padding=10).grid(row=0, column=0, padx=5)
-        ttk.Button(frame_buttons, text="Update Patient", command=self.update_patient, padding=10).grid(row=0, column=1, padx=5)
-        ttk.Button(frame_buttons, text="Delete Patient", command=self.delete_patient, padding=10).grid(row=0, column=2, padx=5)
-        ttk.Button(frame_buttons, text="View All Patients", command=self.view_patients, padding=10).grid(row=0, column=3, padx=5)
-        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10).grid(row=1, column=0, columnspan=4, pady=10)
+        ttk.Button(frame_buttons, text="Add Patient", command=self.add_patient, padding=10, style="Custom.TButton").grid(row=0, column=0, padx=5)
+        ttk.Button(frame_buttons, text="Update Patient", command=self.update_patient, padding=10, style="Custom.TButton").grid(row=0, column=1, padx=5)
+        ttk.Button(frame_buttons, text="Delete Patient", command=self.delete_patient, padding=10, style="Custom.TButton").grid(row=0, column=2, padx=5)
+        ttk.Button(frame_buttons, text="View All Patients", command=self.view_patients, padding=10, style="Custom.TButton").grid(row=0, column=3, padx=5)
+        ttk.Button(frame_buttons, text="Back to Dashboard", command=self.go_back_to_dashboard, padding=10, style="Custom.TButton").grid(row=1, column=0, columnspan=4, pady=10)
 
         # Patient List (Treeview)
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address"), show="headings")
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address"), show="headings", style="Custom.Treeview")
         self.tree.heading("ID", text="ID")
         self.tree.heading("Name", text="Name")
         self.tree.heading("Age", text="Age")

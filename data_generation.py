@@ -104,7 +104,7 @@ def generate_fake_billing(conn, count=20):
             faker.random_element(elements=patient_ids),
             round(faker.random_number(digits=4, fix_len=True) / 100, 2),  # Random amount
             faker.date_this_month().isoformat(),
-            faker.random_element(elements=["Paid", "Pending", "Cancelled"])
+            faker.random_element(elements=["Paid", "Unpaid"])
         ))
     cursor.executemany('''
         INSERT INTO Billing (patient_id, amount, date, status)
@@ -113,20 +113,20 @@ def generate_fake_billing(conn, count=20):
     conn.commit()
     print(f"{count} fake billing records added successfully.")
 
-def generate_fake_users(conn, count=10):
-    """Generate fake data for the Users table."""
-    cursor = conn.cursor()
-    roles = ["Admin", "Doctor", "Receptionist"]
-    fake_data = []
-    for _ in range(count):
-        fake_data.append((
-            faker.user_name(),
-            faker.password(),
-            faker.random_element(elements=roles)
-        ))
-    cursor.executemany('''
-        INSERT INTO Users (username, password, role)
-        VALUES (?, ?, ?)
-    ''', fake_data)
-    conn.commit()
-    print(f"{count} fake users added successfully.")
+# def generate_fake_users(conn, count=10):
+#     """Generate fake data for the Users table."""
+#     cursor = conn.cursor()
+#     roles = ["Admin", "Doctor", "Receptionist"]
+#     fake_data = []
+#     for _ in range(count):
+#         fake_data.append((
+#             faker.user_name(),
+#             faker.password(),
+#             faker.random_element(elements=roles)
+#         ))
+#     cursor.executemany('''
+#         INSERT INTO Users (username, password, role)
+#         VALUES (?, ?, ?)
+#     ''', fake_data)
+#     conn.commit()
+#     print(f"{count} fake users added successfully.")

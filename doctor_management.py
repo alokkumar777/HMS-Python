@@ -10,15 +10,15 @@ class DoctorManagement:
         self.root.geometry("800x600")
 
         # Title Label
-        label_title = tk.Label(root, text="Doctor Management", font=("Arial", 20, "bold"))
+        label_title = ttk.Label(root, text="Doctor Management", font=("Arial", 20, "bold"))
         label_title.pack(pady=10)
 
         # Input Fields
         frame_input = tk.Frame(root)
         frame_input.pack(pady=10)
 
-        tk.Label(frame_input, text="Name:").grid(row=0, column=0, padx=5, pady=5)
-        self.entry_name = tk.Entry(frame_input, width=30)
+        ttk.Label(frame_input, text="Name:").grid(row=0, column=0, padx=5, pady=5)
+        self.entry_name = ttk.Entry(frame_input, width=30)
         self.entry_name.grid(row=0, column=1, padx=5, pady=5)
 
         tk.Label(frame_input, text="Specialization:").grid(row=1, column=0, padx=5, pady=5)
@@ -162,7 +162,7 @@ class DoctorManagement:
 
 def main():
     root = tk.Tk()
-    app = DoctorManagement(root)
+    app = DoctorManagement(root, lambda: None)
     root.mainloop()
 
 if __name__ == "__main__":

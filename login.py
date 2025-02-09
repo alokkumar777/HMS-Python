@@ -27,17 +27,17 @@ def login():
     if user:
         messagebox.showinfo("Login Successful", f"Welcome {user[1]}!")
         root.destroy()  # Close the login window
-        open_dashboard(role)  # Open the dashboard based on role
+        open_dashboard(role, user[0])  # Open the dashboard based on role
     else:
         messagebox.showerror("Login Failed", "Invalid credentials")
 
-def open_dashboard(role):
+def open_dashboard(role, user_id):
     """Open the dashboard based on user role."""
     root = tk.Tk()
     if role == "Admin":
         app = AdminDashboard(root, lambda: main())  # Pass the main function as a callback
     elif role == "Doctor":
-        app = DoctorDashboard(root, lambda: main())  # Pass the main function as a callback
+        app = DoctorDashboard(root, lambda: main(), user_id)  # Pass the main function as a callback
     elif role == "Receptionist":
         app = ReceptionistDashboard(root, lambda: main())  # Pass the main function as a callback
     root.mainloop()

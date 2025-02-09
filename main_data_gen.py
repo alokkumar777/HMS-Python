@@ -6,7 +6,7 @@ from data_generation import (
     generate_fake_appointments,
     generate_fake_medical_records, 
     generate_fake_billing, 
-    generate_fake_users
+    # generate_fake_users
 )
 
 if __name__ == "__main__":
@@ -18,6 +18,6 @@ if __name__ == "__main__":
     generate_fake_appointments(conn, count=30)
     generate_fake_medical_records(conn, count=30)
     generate_fake_billing(conn, count=20)
-    generate_fake_users(conn, count=10)
+    # generate_fake_users(conn, count=10)
 
     conn.close()
