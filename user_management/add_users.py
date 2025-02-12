@@ -19,12 +19,12 @@
 import sqlite3
 
 def add_users():
-    conn = sqlite3.connect('hospital.db')
+    conn = sqlite3.connect('../database/hospital.db')
     cursor = conn.cursor()
     users = [
         ("Alok Kumar", "itsak123", "Admin"),
-        # ("doctor", "doctor123", "Doctor"),
-        # ("receptionist", "receptionist123", "Receptionist")
+        ("fisher", "fisher123", "Doctor"),
+        ("recep", "recep123", "Receptionist")
     ]
     cursor.executemany('INSERT INTO Users (username, password, role) VALUES (?, ?, ?)', users)
     conn.commit()
@@ -32,3 +32,4 @@ def add_users():
     print("Users added successfully.")
 
 add_users()
+

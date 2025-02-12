@@ -12,13 +12,16 @@ def create_tables(conn):
     # Patients Table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Patients (
-            patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            age INTEGER,
-            gender TEXT,
-            contact_number TEXT,
-            address TEXT,
-            date_of_registration TEXT
+        patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        age INTEGER,
+        gender TEXT,
+        contact_number TEXT,
+        address TEXT,
+        category TEXT NOT NULL, -- Added column
+        room_id INTEGER,        -- Added column
+        date_of_registration TEXT,
+        FOREIGN KEY (room_id) REFERENCES Rooms (room_id)
         )
     ''')
 
@@ -80,6 +83,18 @@ def create_tables(conn):
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             role TEXT NOT NULL
+        )
+    ''')
+
+    # Rooms Table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Rooms (
+            room_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            room_number INTEGER NOT NULL UNIQUE,
+            room_type TEXT,
+            is_available INTEGER DEFAULT 1, -- 1 for available, 0 for occupied
+            assigned_patient_id INTEGER,
+            FOREIGN KEY (assigned_patient_id) REFERENCES Patients (patient_id)
         )
     ''')
 
