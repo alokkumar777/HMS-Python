@@ -40,9 +40,9 @@ class PatientManagement:
 
         # Category Selection
         ttk.Label(frame_input, text="Category:").grid(row=5, column=0, padx=5, pady=5)
-        self.category_var = tk.StringVar(value="Outpatient")
-        ttk.Radiobutton(frame_input, text="Inpatient", variable=self.category_var, value="Inpatient", command=self.toggle_room_selection).grid(row=5, column=1, padx=5, pady=5)
-        ttk.Radiobutton(frame_input, text="Outpatient", variable=self.category_var, value="Outpatient", command=self.toggle_room_selection).grid(row=5, column=2, padx=5, pady=5)
+        self.category_var = tk.StringVar(value="Out Patient")
+        ttk.Radiobutton(frame_input, text="In Patient", variable=self.category_var, value="In Patient", command=self.toggle_room_selection, style="Custom.TRadiobutton").grid(row=5, column=1, padx=5, pady=5)
+        ttk.Radiobutton(frame_input, text="Out Patient", variable=self.category_var, value="Out Patient", command=self.toggle_room_selection, style="Custom.TRadiobutton").grid(row=5, column=2, padx=5, pady=5)
 
         # Room Selection
         ttk.Label(frame_input, text="Room:").grid(row=6, column=0, padx=5, pady=5)
@@ -72,6 +72,7 @@ class PatientManagement:
         style.configure("Custom.TButton", font=("Verdana", 10))
         style.configure("Custom.Treeview", font=("Verdana", 10))
         style.configure("Custom.Treeview.Heading", font=("Verdana", 10, "bold"))
+        style.configure("Custom.TRadiobutton", font=("Verdana", 10))
         frame_buttons = tk.Frame(root)
         frame_buttons.pack(pady=10)
 
@@ -85,7 +86,7 @@ class PatientManagement:
         frame_list = tk.Frame(root)
         frame_list.pack(pady=10)
 
-        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address", "Category", "Room"), show="headings", style="Custom.Treeview", padding=10)
+        self.tree = ttk.Treeview(frame_list, columns=("ID", "Name", "Age", "Gender", "Contact", "Address", "Category", "Room No."), show="headings", style="Custom.Treeview", padding=10)
         self.tree.heading("ID", text="ID")
         self.tree.heading("Name", text="Name")
         self.tree.heading("Age", text="Age")
@@ -93,7 +94,7 @@ class PatientManagement:
         self.tree.heading("Contact", text="Contact")
         self.tree.heading("Address", text="Address")
         self.tree.heading("Category", text="Category")
-        self.tree.heading("Room", text="Room")
+        self.tree.heading("Room No.", text="Room No.")
         self.tree.pack()
 
         # Adjust the width
@@ -108,7 +109,7 @@ class PatientManagement:
         self.view_patients()
 
     def toggle_room_selection(self):
-        if self.category_var.get() == "Inpatient":
+        if self.category_var.get() == "In Patient":
             self.room_dropdown["state"] = "readonly"
         else:
             self.room_dropdown["state"] = "disabled"
@@ -135,9 +136,9 @@ class PatientManagement:
         contact = self.entry_contact.get()
         address = self.entry_address.get()
         category = self.category_var.get()
-        room_number = self.room_var.get() if category == "Inpatient" else None
+        room_number = self.room_var.get() if category == "In Patient" else None
 
-        if not name or not age or not gender or not contact or not address or (category == "Inpatient" and not room_number):
+        if not name or not age or not gender or not contact or not address or (category == "In Patient" and not room_number):
             messagebox.showerror("Error", "All fields are required!")
             return
 
@@ -145,7 +146,7 @@ class PatientManagement:
         cursor = conn.cursor()
 
         room_id = None
-        if category == "Inpatient" and room_number:
+        if category == "In Patient" and room_number:
             cursor.execute("SELECT room_id FROM Rooms WHERE room_number = ?", (room_number,))
             room_id = cursor.fetchone()[0]
             cursor.execute("UPDATE Rooms SET is_available = 0 WHERE room_id = ?", (room_id,))
@@ -201,13 +202,13 @@ class PatientManagement:
         contact = self.entry_contact.get()
         address = self.entry_address.get()
         category = self.category_var.get()
-        new_room_number = self.room_var.get() if category == "Inpatient" else None
+        new_room_number = self.room_var.get() if category == "In Patient" else None
 
         if not name or not age or not gender or not contact or not address:
             messagebox.showerror("Error", "All fields are required!")
             return
 
-        if category == "Inpatient" and not new_room_number:
+        if category == "In Patient" and not new_room_number:
             messagebox.showerror("Error", "Room number is required for inpatients!")
             return
 
@@ -226,7 +227,7 @@ class PatientManagement:
 
             # Handle room changes
             new_room_id = None
-            if category == "Inpatient":
+            if category == "In Patient":
                 # Get new room ID
                 cursor.execute("SELECT room_id FROM Rooms WHERE room_number = ?", (new_room_number,))
                 new_room_id = cursor.fetchone()[0]
@@ -353,7 +354,7 @@ class PatientManagement:
         self.entry_contact.delete(0, tk.END)
         self.entry_address.delete(0, tk.END)
         self.room_dropdown.set("")
-        self.category_var.set("Outpatient")
+        self.category_var.set("Out Patient")
 
 def main():
     root = tk.Tk()
