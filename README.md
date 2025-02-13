@@ -91,8 +91,8 @@ The **Hospital Management System (HMS)** is a Python-based application designed 
 
 2. Use the following credentials to log in:
    - Admin:
-     - Username: `Alok Kumar`
-     - Password: `itsak123`
+     - Username: `Admin`
+     - Password: `admin123`
    - Doctor:
      - Username: `fisher`
      - Password: `fisher123`
