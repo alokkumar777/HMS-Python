@@ -14,6 +14,6 @@ def view_users_table(conn):
         print(row)
 
 # Connect to the database and call the function
-conn = sqlite3.connect('hospital.db')
+conn = sqlite3.connect('../database/hospital.db')
 view_users_table(conn)
 conn.close()
